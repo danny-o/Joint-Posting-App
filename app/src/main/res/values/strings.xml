@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Posting App</string>
+
+    <string name="intent_scheme">oauth</string>
+    <string name="intent_host">cprest</string>
+
+    <string name="file_name">File Name: %1s</string>
+
+    <string name="facebook_app_id">YOUR FACEBOOK APP ID</string>
+    <string name="facebook_client_token">YOUR FACEBOOK APP CLIENT TOKEN</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="not_logged_in">Not logged on %1s</string>
+    <string name="login_now">You have not logged in on %1s. Login now?</string>
+    <string name="linkedin_credentials_expired">Linkedin credentials expired</string>
+    <string name="linked_credentials_expired_login_again">LinkedIn credentials expired. Login again?</string>
+    <string name="posting_successful">Posting successful</string>
+    <string name="error_while_posting">Error while posting</string>
+    <string name="posting">Posting</string>
+    <string name="attach_media_or_link">Attach Media/Link</string>
+    <string name="facebook_requires_media_or_link_included">Facebook API requires media to be attached or the post to have a link url, include either of them.</string>
+    <string name="cancelled">Cancelled</string>
+
+    <string name="authority" translatable="false">//packagename//.fileProvider</string>
+    <string name="complete">Complete</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="email">Email: %1s</string>
+    <string name="name">Name: %1s</string>
+    <string name="signed_out">Signed out</string>
+    <string name="signed_in">Signed in</string>
+</resources>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/twitter_posting_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_twitter_posting"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.08" />
+
+    <ImageView
+        android:id="@+id/iv_twitter_posting_complete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_twitter_posting"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.08"/>
+
+    <TextView
+        android:id="@+id/tv_twitter_posting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Posting"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/twitter_posting_progressbar"
+        app:layout_constraintEnd_toStartOf="@+id/twitter_posting_progressbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_twitter_logo"
+        app:layout_constraintTop_toTopOf="@+id/iv_twitter_logo" />
+
+    <ImageView
+        android:id="@+id/iv_twitter_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/twitter_posting_progressbar"
+        app:layout_constraintEnd_toStartOf="@+id/tv_twitter_posting"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.12"
+        app:srcCompat="@drawable/twitter_icon" />
+
+    <ProgressBar
+        android:id="@+id/linkedin_posting_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_linkedin_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_twitter_logo"
+        app:layout_constraintWidth_percent="0.08" />
+
+    <ImageView
+        android:id="@+id/iv_linkedin_posting_complete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_linkedin_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_twitter_logo"
+        app:layout_constraintWidth_percent="0.08"
+
+        />
+
+
+
+    <TextView
+        android:id="@+id/tv_linkedin_posting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Queued"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/linkedin_posting_progressbar"
+        app:layout_constraintEnd_toStartOf="@+id/linkedin_posting_progressbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_linkedin_logo"
+        app:layout_constraintTop_toBottomOf="@+id/iv_twitter_logo" />
+
+    <ImageView
+        android:id="@+id/iv_linkedin_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toStartOf="@+id/tv_linkedin_posting"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_twitter_logo"
+        app:layout_constraintWidth_percent="0.10"
+        app:srcCompat="@drawable/ic_linkedin_icon" />
+
+
+    <ProgressBar
+        android:id="@+id/facebook_posting_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_facebook_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_linkedin_logo"
+        app:layout_constraintWidth_percent="0.08" />
+    <ImageView
+        android:id="@+id/iv_facebook_posting_complete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_facebook_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_linkedin_logo"
+        app:layout_constraintWidth_percent="0.08"/>
+
+    <TextView
+        android:id="@+id/tv_facebook_posting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Queued"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/facebook_posting_progressbar"
+        app:layout_constraintEnd_toStartOf="@+id/facebook_posting_progressbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_facebook_logo"
+        app:layout_constraintTop_toBottomOf="@+id/iv_linkedin_logo" />
+
+    <ImageView
+        android:id="@+id/iv_facebook_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toStartOf="@+id/tv_facebook_posting"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_linkedin_logo"
+        app:layout_constraintWidth_percent="0.10"
+        app:srcCompat="@drawable/ic_facebook_logo" />
+
+    <ProgressBar
+        android:id="@+id/whatsapp_posting_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_whatsapp_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_facebook_logo"
+        app:layout_constraintWidth_percent="0.08" />
+    <ImageView
+        android:id="@+id/iv_whatsapp_posting_complete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_check"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_whatsapp_posting"
+        app:layout_constraintTop_toBottomOf="@+id/iv_facebook_logo"
+        app:layout_constraintWidth_percent="0.08"/>
+
+    <TextView
+        android:id="@+id/tv_whatsapp_posting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Queued"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/whatsapp_posting_progressbar"
+        app:layout_constraintEnd_toStartOf="@+id/whatsapp_posting_progressbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/iv_whatsapp_logo"
+        app:layout_constraintTop_toBottomOf="@+id/iv_facebook_logo" />
+
+    <ImageView
+        android:id="@+id/iv_whatsapp_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toStartOf="@+id/tv_whatsapp_posting"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_facebook_logo"
+        app:layout_constraintWidth_percent="0.10"
+        app:srcCompat="@drawable/ic_whatsapp_icon" />
+
+    <Button
+        android:id="@+id/btn_go_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go Back"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_whatsapp_logo"
+        app:layout_constraintVertical_bias="0.19999999" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
