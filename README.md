@@ -14,7 +14,7 @@ Create status updates on twitter, linkedin, facebook and whatsapp from the app
 ## Demo
 
 
-<p><img src="assets/demo.gif" alt="Joint Posting App" height="500px"></p>
+<p><img src="assets/app_demo.gif" alt="Joint Posting App" height="500px"></p>
 
 
 ## Screenshots
