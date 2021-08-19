@@ -14,7 +14,7 @@
         android:background="@drawable/box_background"
         android:ems="10"
         android:gravity="top"
-        android:hint="post your message"
+        android:hint="@string/talk_to_the_world"
         android:inputType="textMultiLine"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"

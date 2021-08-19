@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +47,8 @@ class HomeFragment:Fragment(){
     lateinit var fileSize:String
 
     lateinit var fileType:String
+
+    var transaction: FragmentTransaction?=null
 
     var linkedInUserSet=false
 
@@ -129,7 +133,6 @@ class HomeFragment:Fragment(){
             if(it==true){
              clearEntries()
 
-             mainActivityViewModel.clearPostingMessages()
             }
 
 
@@ -213,7 +216,9 @@ class HomeFragment:Fragment(){
                 bundle.putString(MEDIA_TYPE,fileType)
             }
 
-            requireActivity().supportFragmentManager
+            transaction=null
+
+           transaction= requireActivity().supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(
                             R.anim.slide_in_right,
@@ -221,9 +226,17 @@ class HomeFragment:Fragment(){
                             R.anim.slide_in_left,
                             R.anim.slide_out_right
                     )
-                    .addToBackStack(null)
-                    .replace(R.id.frame_layout,PostingFragment::class.java,bundle,PostingFragment::class.java.simpleName)
-                    .commit()
+
+
+
+
+
+
+
+
+          transaction?.addToBackStack(null)
+              ?.replace(R.id.frame_layout,PostingFragment::class.java,bundle,PostingFragment::class.java.simpleName)
+              ?.commit()
 
 
         }

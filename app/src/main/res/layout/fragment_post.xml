@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/posting_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="iv_twitter_posting_complete,iv_facebook_posting_complete,iv_linkedin_posting_complete,iv_whatsapp_posting_complete"/>
+
+
     <ProgressBar
         android:id="@+id/twitter_posting_progressbar"
         style="?android:attr/progressBarStyle"
@@ -38,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Posting"
+        android:text="@string/posting"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/twitter_posting_progressbar"
         app:layout_constraintEnd_toStartOf="@+id/twitter_posting_progressbar"
@@ -98,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Queued"
+        android:text="@string/queued"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/linkedin_posting_progressbar"
         app:layout_constraintEnd_toStartOf="@+id/linkedin_posting_progressbar"
@@ -152,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Queued"
+        android:text="@string/queued"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/facebook_posting_progressbar"
         app:layout_constraintEnd_toStartOf="@+id/facebook_posting_progressbar"
@@ -205,7 +213,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Queued"
+        android:text="@string/queued"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/whatsapp_posting_progressbar"
         app:layout_constraintEnd_toStartOf="@+id/whatsapp_posting_progressbar"

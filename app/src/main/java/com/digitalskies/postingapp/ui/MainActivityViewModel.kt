@@ -13,11 +13,8 @@ import com.digitalskies.postingapp.application.dataStore
 import com.digitalskies.postingapp.models.*
 import com.digitalskies.postingapp.utils.*
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -135,6 +132,8 @@ class MainActivityViewModel(private val postingApplication: Application):Android
 
             val visibility=Visibility("PUBLIC")
 
+
+
             val linkedInPost=LinkedInPost(URN_PERSON + linkedId.toString(), PUBLISHED, specificContent, visibility)
 
                 try {
@@ -251,7 +250,12 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
 
         parameters["media_ids"]= it
+
     }
+
+
+
+    twitterResponse.postValue(TwitterResponse.TwitterResponseSuccessful)
     twitterHeaderBuilder.parameters=parameters
 
 
@@ -306,6 +310,8 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
         parameters["media_type"]=mediaType
 
         twitterHeaderBuilder.parameters=parameters
+
+
 
        try {
            var header=twitterHeaderBuilder.buildString()
@@ -445,14 +451,7 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
 
     }
-    fun clearResponseMessages(){
-        loginResponse.postValue(null)
-    }
 
-    fun clearPostingMessages(){
-
-        postingComplete.postValue(null)
-    }
 
     sealed class LoginResponse(){
 

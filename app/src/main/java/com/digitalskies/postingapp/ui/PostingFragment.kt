@@ -6,10 +6,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +43,8 @@ const val POST_ON_LINKEDIN="post_on_linkedin"
 const val POST_ON_FACEBOOK="post_on_facebook"
 
 const val POST_ON_WHATSAPP="post_on_whatsapp"
+
+
 
 class PostingFragment:Fragment() {
     lateinit var postBinding: FragmentPostBinding
@@ -78,7 +80,15 @@ class PostingFragment:Fragment() {
     lateinit var mainActivityViewModel: MainActivityViewModel
 
     lateinit var shareDialog:ShareDialog
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         postBinding= FragmentPostBinding.inflate(layoutInflater, container, false)
 
@@ -86,12 +96,24 @@ class PostingFragment:Fragment() {
 
         mainActivityViewModel= ViewModelProvider(requireActivity()).get(MainActivityViewModel::class.java)
 
+
+
         if(arguments?.getString(MEDIA_URI)!=null){
            mediaUri= Uri.parse(arguments?.getString(MEDIA_URI))
 
             mediaType= arguments?.getString(MEDIA_TYPE)
 
-            file = File(FilePath.getPath(this.requireActivity(), Uri.parse(arguments?.getString(MEDIA_URI))))
+
+
+            file = File(
+                FilePath.getPath(
+                    this.requireActivity(), Uri.parse(
+                        arguments?.getString(
+                            MEDIA_URI
+                        )
+                    )
+                )
+            )
         }
 
 
@@ -109,11 +131,11 @@ class PostingFragment:Fragment() {
             requireActivity().supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(
-                    R.anim.slide_out_right,
-                    R.anim.slide_in_left,
+                        R.anim.slide_out_right,
+                        R.anim.slide_in_left,
 
-                    )
-                    .replace(R.id.frame_layout,HomeFragment())
+                        )
+                    .replace(R.id.frame_layout, HomeFragment())
                     .commit()
         }
 
@@ -155,14 +177,15 @@ class PostingFragment:Fragment() {
                 postBinding.tvLinkedinPosting.text=getString(R.string.error_while_posting)
             }
             postBinding.tvFacebookPosting.text=getString(R.string.posting)
-            postOnFaceBook()
+            //postOnFaceBook()
         }
+
+
 
 
 
         return view
     }
-
 
 
     override fun onResume() {
@@ -183,17 +206,10 @@ class PostingFragment:Fragment() {
     }
 
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
 
-        if(savedInstanceState?.getBoolean(POST_ON_WHATSAPP)==true){
-            Log.d(PostingFragment::class.java.simpleName,"${savedInstanceState.getBoolean(POST_ON_WHATSAPP)}")
-        }
-
-
-    }
 
     private fun hidePostingUI() {
+
 
         toPostOnTwitter=arguments?.getBoolean(POST_ON_TWITTER)?:false
 
@@ -202,6 +218,24 @@ class PostingFragment:Fragment() {
         toPostOnLinkedIn=arguments?.getBoolean(POST_ON_LINKEDIN)?:false
 
         toPostOnWhatsapp=arguments?.getBoolean(POST_ON_WHATSAPP)?:false
+
+
+
+        postBinding.postingComplete.isVisible=false
+
+        postBinding.tvTwitterPosting.text=getString(R.string.posting)
+
+        getString(R.string.queued).let {
+            postBinding.tvLinkedinPosting.text=it
+
+            postBinding.tvTwitterPosting.text=it
+
+            postBinding.tvLinkedinPosting.text=it
+        }
+
+
+
+
         if(!toPostOnTwitter){
 
             postBinding.tvTwitterPosting.isVisible=false
@@ -214,6 +248,8 @@ class PostingFragment:Fragment() {
         }
 
         if(!toPostOnLinkedIn){
+
+            postBinding.tvLinkedinPosting.text=getString(R.string.queued)
 
             postBinding.tvLinkedinPosting.isVisible=false
 
@@ -247,14 +283,16 @@ class PostingFragment:Fragment() {
 
     private fun postOnFaceBook() {
         if(toPostOnFacebook){
+
+
             shareDialog= ShareDialog(this)
             shareDialog.registerCallback(callbackManager, object : FacebookCallback<Sharer.Result> {
 
                 override fun onSuccess(result: Sharer.Result?) {
 
-                    postBinding.ivFacebookPostingComplete.visibility=View.VISIBLE
+                    postBinding.ivFacebookPostingComplete.visibility = View.VISIBLE
 
-                    postBinding.facebookPostingProgressbar.visibility=View.INVISIBLE
+                    postBinding.facebookPostingProgressbar.visibility = View.INVISIBLE
                     postBinding.tvFacebookPosting.text = getString(R.string.posting_successful)
                     postOnWhatsapp()
 
@@ -328,7 +366,10 @@ class PostingFragment:Fragment() {
         val sharePhoto: SharePhoto
 
 
-        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, mediaUri)
+        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(
+            requireActivity().contentResolver,
+            mediaUri
+        )
         sharePhoto= SharePhoto.Builder()
                 .setBitmap(bitmap)
                 .setCaption(message)
@@ -365,7 +406,7 @@ class PostingFragment:Fragment() {
                 }
 
 
-                share.putExtra(Intent.EXTRA_TEXT,message)
+                share.putExtra(Intent.EXTRA_TEXT, message)
 
                 share.type="text/plain"
 
@@ -400,7 +441,7 @@ class PostingFragment:Fragment() {
 
             postOnLinkedIn=lifecycleScope.launch(Dispatchers.IO){
 
-                mainActivityViewModel.postOnLinkedIn(post = message.toString(),articleUrl = link)
+                mainActivityViewModel.postOnLinkedIn(post = message.toString(), articleUrl = link)
             }
         }
         else{
@@ -420,9 +461,9 @@ class PostingFragment:Fragment() {
                 if(file!=null){
                     file?.let {
                         mainActivityViewModel.postOnTwitterWithMedia(
-                                message.toString(),
-                                it,
-                                mediaType.toString()
+                            message.toString(),
+                            it,
+                            mediaType.toString()
                         )
 
                     }
@@ -444,7 +485,7 @@ class PostingFragment:Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        callbackManager.onActivityResult(requestCode,resultCode,data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
 
 
         }
