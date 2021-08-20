@@ -56,12 +56,12 @@
         android:id="@+id/btnAttchImageOrVideo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/spacing_small"
         android:text="Attach Image Or Video"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_character_count" />
 
     <TextView
         android:id="@+id/tvFileName"
@@ -132,5 +132,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_settings" />
+
+    <TextView
+        android:id="@+id/tv_character_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:text="0 characters"
+        app:layout_constraintEnd_toEndOf="@+id/etMessage"
+        app:layout_constraintTop_toBottomOf="@+id/etMessage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,12 @@
 <resources>
-
-<string name="facebook_app_id">YOUR FACEBOOK APP ID</string>
-    
-
-     <string name="app_name">Posting App</string>
+    <string name="app_name">Posting App</string>
 
     <string name="intent_scheme">oauth</string>
     <string name="intent_host">cprest</string>
 
     <string name="file_name">File Name: %1s</string>
 
+    <string name="facebook_app_id">YOUR FACEBOOK APP ID</string>
     <string name="facebook_client_token">YOUR FACEBOOK APP CLIENT TOKEN</string>
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="not_logged_in">Not logged on %1s</string>
@@ -27,24 +24,15 @@
     <string name="complete">Complete</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
     <string name="email">Email: %1s</string>
     <string name="name">Name: %1s</string>
     <string name="signed_out">Signed out</string>
     <string name="signed_in">Signed in</string>
     <string name="queued">Queued</string>
     <string name="talk_to_the_world">talk to the world</string>
+    <string name="characters">%1d characters</string>
+
 </resources>

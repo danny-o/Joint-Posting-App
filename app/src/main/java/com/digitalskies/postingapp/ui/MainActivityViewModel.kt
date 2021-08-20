@@ -43,9 +43,9 @@ class MainActivityViewModel(private val postingApplication: Application):Android
     val twitterUserIsSet: Flow<Boolean>
         get() = checkTwitterLogin(application = postingApplication)
 
-    var twitterResponse:MutableLiveData<TwitterResponse> = MutableLiveData()
+    var twitterResponse:MutableLiveData<Event<TwitterResponse>> = MutableLiveData()
 
-    var linkedInResponse:MutableLiveData<LinkedInResponse> = MutableLiveData()
+    var linkedInResponse:MutableLiveData<Event<LinkedInResponse>> = MutableLiveData()
 
     var loginResponse:MutableLiveData<Event<LoginResponse>> = MutableLiveData()
 
@@ -125,7 +125,6 @@ class MainActivityViewModel(private val postingApplication: Application):Android
 
             }
 
-
             val specificContent=SpecificContent(shareContent)
 
 
@@ -133,15 +132,14 @@ class MainActivityViewModel(private val postingApplication: Application):Android
             val visibility=Visibility("PUBLIC")
 
 
-
             val linkedInPost=LinkedInPost(URN_PERSON + linkedId.toString(), PUBLISHED, specificContent, visibility)
 
                 try {
                     RestClient.getLinkedInProfileApi().postOnLinkedIn(authorization = "$BEARER $accessToken", linkedInPost)
 
-                    linkedInResponse.postValue(LinkedInResponse.ResponseSuccessful)
+                    linkedInResponse.postValue(Event(LinkedInResponse.ResponseSuccessful))
                 } catch (e: Exception) {
-                    linkedInResponse.postValue(LinkedInResponse.ResponseFailed(e.message))
+                    linkedInResponse.postValue(Event(LinkedInResponse.ResponseFailed(e.message)))
                 }
 
 
@@ -254,10 +252,7 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
     }
 
 
-
-    twitterResponse.postValue(TwitterResponse.TwitterResponseSuccessful)
     twitterHeaderBuilder.parameters=parameters
-
 
             try {
             val header=twitterHeaderBuilder.buildString()
@@ -265,12 +260,12 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
             RestClient.getTwitterApi().tweet(authorization = header, status = status, mediaId = mediaId)
 
-            twitterResponse.postValue(TwitterResponse.TwitterResponseSuccessful)
+            twitterResponse.postValue(Event(TwitterResponse.TwitterResponseSuccessful))
 
 
         } catch (e: Exception) {
             e.printStackTrace()
-            twitterResponse.postValue(TwitterResponse.TwitterResponseFailed(e.message))
+            twitterResponse.postValue(Event(TwitterResponse.TwitterResponseFailed(e.message)))
         }
 
 
@@ -320,11 +315,6 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
 
            val mediaId= mediaIdResponse.mediaId
-
-           Log.d(MainActivityViewModel::class.java.simpleName, "Media Id is $mediaId")
-
-
-
 
 
            val ifExceedsMAxFileSize= file.length()>TWITTER_MAX_FILE_SIZE
@@ -376,7 +366,7 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
                     }
                 } catch (e: Exception) {
 
-                    twitterResponse.postValue(TwitterResponse.TwitterResponseFailed(e.message))
+                    twitterResponse.postValue(Event(TwitterResponse.TwitterResponseFailed(e.message)))
                 }
 
 
@@ -385,12 +375,6 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
         }
            else{
 
-
-
-
-              Log.d(MainActivityViewModel::class.java.simpleName, "File within limit")
-
-              Log.d(MainActivityViewModel::class.java.simpleName, "Appending file")
 
 
 
@@ -410,8 +394,6 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
               parameters["media_id"]= mediaId
               parameters["segment_index"]="0"
               parameters["media_data"]= base64
-
-
 
 
 
@@ -446,7 +428,7 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
            e.printStackTrace()
 
-           twitterResponse.postValue(TwitterResponse.TwitterResponseFailed(e.message))
+           twitterResponse.postValue(Event(TwitterResponse.TwitterResponseFailed(e.message)))
        }
 
 
