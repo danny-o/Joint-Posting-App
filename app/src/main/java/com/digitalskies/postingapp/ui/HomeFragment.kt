@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
@@ -48,6 +51,8 @@ class HomeFragment:Fragment(){
 
     lateinit var fileType:String
 
+    var characterCount:Int=0
+
     var transaction: FragmentTransaction?=null
 
     var linkedInUserSet=false
@@ -72,23 +77,7 @@ class HomeFragment:Fragment(){
 
     private var toPostOnWhatsapp=false
 
-    val eventObserver= EventObserver<MainActivityViewModel.LoginResponse> { data ->
 
-
-        if (data != null) {
-
-
-            if (data is MainActivityViewModel.LoginResponse.LoginSuccessful) {
-                Toast.makeText(requireContext(), "sucss", Toast.LENGTH_SHORT).show()
-
-
-            } else if (data is MainActivityViewModel.LoginResponse.LoginFailed) {
-
-                Log.d(HomeFragment::class.java.simpleName, data.errorMessage.toString())
-                Toast.makeText(requireContext(), data.errorMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -138,7 +127,25 @@ class HomeFragment:Fragment(){
 
         })
 
-        mainActivityViewModel.loginResponse.observe(viewLifecycleOwner,eventObserver)
+        fragmentHomeBinding.etMessage.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                /* no-op */
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                fragmentHomeBinding.tvCharacterCount.text = getString(R.string.characters,
+                    s.toString().length)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                /* no-op */
+            }
+
+
+        })
+
+
 
 
 
@@ -226,11 +233,6 @@ class HomeFragment:Fragment(){
                             R.anim.slide_in_left,
                             R.anim.slide_out_right
                     )
-
-
-
-
-
 
 
 

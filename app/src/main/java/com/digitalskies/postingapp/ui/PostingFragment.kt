@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.digitalskies.postingapp.R
 import com.digitalskies.postingapp.databinding.FragmentPostBinding
 import com.digitalskies.postingapp.utils.Event
+import com.digitalskies.postingapp.utils.EventObserver
 import com.digitalskies.postingapp.utils.FilePath
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -24,9 +25,7 @@ import com.facebook.FacebookException
 import com.facebook.share.Sharer
 import com.facebook.share.model.*
 import com.facebook.share.widget.ShareDialog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 
 
@@ -139,46 +138,60 @@ class PostingFragment:Fragment() {
                     .commit()
         }
 
-        mainActivityViewModel.twitterResponse.observe(viewLifecycleOwner){ twitterResponse->
-            if(twitterResponse is MainActivityViewModel.TwitterResponse.TwitterResponseSuccessful){
 
-                postBinding.tvTwitterPosting.text=getString(R.string.posting_successful)
 
-                postBinding.twitterPostingProgressbar.visibility=View.INVISIBLE
+        mainActivityViewModel.twitterResponse.observe(viewLifecycleOwner,EventObserver{ twitterResponse->
 
-                postBinding.ivTwitterPostingComplete.visibility=View.VISIBLE
+            if(twitterResponse!=null){
+
+                if(twitterResponse is MainActivityViewModel.TwitterResponse.TwitterResponseSuccessful){
+
+                    postBinding.tvTwitterPosting.text=getString(R.string.posting_successful)
+
+                    postBinding.twitterPostingProgressbar.visibility=View.INVISIBLE
+
+                    postBinding.ivTwitterPostingComplete.visibility=View.VISIBLE
+                }
+                else{
+
+                    postBinding.tvTwitterPosting.setTextColor(resources.getColor(R.color.red))
+
+                    postBinding.tvTwitterPosting.text=getString(R.string.error_while_posting)
+                }
+                postBinding.tvLinkedinPosting.text=getString(R.string.posting)
+
+                postOnLinkedIn()
             }
-            else{
 
-                postBinding.tvTwitterPosting.setTextColor(resources.getColor(R.color.red))
 
-                postBinding.tvTwitterPosting.text=getString(R.string.error_while_posting)
+
+        })
+
+
+
+        mainActivityViewModel.linkedInResponse.observe(viewLifecycleOwner,EventObserver{ linkedInResponse->
+
+            if(linkedInResponse!=null){
+
+                if(linkedInResponse is MainActivityViewModel.LinkedInResponse.ResponseSuccessful){
+
+                    postBinding.tvLinkedinPosting.text=getString(R.string.posting_successful)
+
+                    postBinding.linkedinPostingProgressbar.visibility=View.INVISIBLE
+
+                    postBinding.ivLinkedinPostingComplete.visibility=View.VISIBLE
+                }
+                else{
+
+                    postBinding.tvLinkedinPosting.setTextColor(resources.getColor(R.color.red))
+                    postBinding.tvLinkedinPosting.text=getString(R.string.error_while_posting)
+                }
+                postBinding.tvFacebookPosting.text=getString(R.string.posting)
+                postOnFaceBook()
             }
-            postBinding.tvLinkedinPosting.text=getString(R.string.posting)
-
-            postOnLinkedIn()
 
 
-        }
-
-        mainActivityViewModel.linkedInResponse.observe(viewLifecycleOwner){ linkedInResponse->
-
-            if(linkedInResponse is MainActivityViewModel.LinkedInResponse.ResponseSuccessful){
-
-                postBinding.tvLinkedinPosting.text=getString(R.string.posting_successful)
-
-                postBinding.linkedinPostingProgressbar.visibility=View.INVISIBLE
-
-                postBinding.ivLinkedinPostingComplete.visibility=View.VISIBLE
-            }
-            else{
-
-                postBinding.tvLinkedinPosting.setTextColor(resources.getColor(R.color.red))
-                postBinding.tvLinkedinPosting.text=getString(R.string.error_while_posting)
-            }
-            postBinding.tvFacebookPosting.text=getString(R.string.posting)
-            //postOnFaceBook()
-        }
+        })
 
 
 
