@@ -6,7 +6,7 @@
 
 # Joint-Posting-App
 
-Create status updates on twitter, linkedin, facebook and whatsapp from the app
+Create status updates on twitter, linkedin, facebook and whatsapp from the app. If you like posting across social media platforms without having to go to each platform to post, then this is for you.
 
 
 
