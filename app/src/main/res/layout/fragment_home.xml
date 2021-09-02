@@ -70,6 +70,11 @@
         android:layout_marginTop="16dp"
         android:text="File Name"
         android:visibility="gone"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@+id/etMessage"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btnAttchImageOrVideo"
         app:layout_constraintTop_toBottomOf="@+id/btnAttchImageOrVideo" />
 
@@ -114,7 +119,6 @@
         android:id="@+id/check_box_whatsapp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:drawableStart="@drawable/ic_whatsapp_icon"
         android:drawablePadding="4dp"
         android:text="Whatsapp"
