@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -48,6 +49,8 @@ class HomeFragment:Fragment(){
     lateinit var file: File
 
     lateinit var fileSize:String
+
+    var fileName:String?=null
 
     lateinit var fileType:String
 
@@ -106,6 +109,35 @@ class HomeFragment:Fragment(){
         setUpCheckBoxes()
 
         setUpSettingsBtn()
+
+
+
+
+        fileName?.let { fragmentHomeBinding.tvFileName.text=it }
+
+        if(arguments!=null){
+            if(arguments?.containsKey(MEDIA_URI)==true){
+
+                mediaAttached=true
+
+
+                fileUri= Uri.parse(arguments?.getString(MEDIA_URI))
+
+                fileUri?.let { fileType= requireActivity().contentResolver.getType(it).toString() }
+
+
+
+                getFileName()
+
+            }
+            else if(arguments?.containsKey(LINK)==true){
+
+                fragmentHomeBinding.etMessage.setText(arguments?.getString(LINK))
+
+                fragmentHomeBinding.tvCharacterCount.text=getString(R.string.characters,arguments?.getString(LINK)?.length)
+            }
+        }
+
 
         mainActivityViewModel.linkedInUserIsSet.asLiveData().observe(viewLifecycleOwner){linkedInUserSet->
 
@@ -171,6 +203,8 @@ class HomeFragment:Fragment(){
 
         fileUri=null
 
+        fragmentHomeBinding.tvFileName.isVisible=false
+
         toPostOnTwitter=false
 
         toPostOnFacebook=false
@@ -186,7 +220,11 @@ class HomeFragment:Fragment(){
         fragmentHomeBinding.btnPost.setOnClickListener {
 
             if(fragmentHomeBinding.etMessage.text.isEmpty()){
-                return@setOnClickListener
+
+                if(!mediaAttached){
+                    return@setOnClickListener
+                }
+
 
 
             }
@@ -459,13 +497,13 @@ class HomeFragment:Fragment(){
                 val contentResolver = requireContext().contentResolver
 
 
-                val cursor = contentResolver.query(fileUri!!, null, null, null, null)
+
 
                 val mimeType = contentResolver.getType(uri)
 
                 if (mimeType?.startsWith("image") == false) {
 
-                    if (mimeType.startsWith("video") == false) {
+                    if (!mimeType.startsWith("video")) {
                         Toast.makeText(
                                 requireContext(),
                                 "Attach an image or video",
@@ -481,41 +519,7 @@ class HomeFragment:Fragment(){
 
                 mediaAttached = true
 
-                cursor?.let {
-                    try {
-                        if (cursor.moveToFirst()) {
-                            val fileSizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-
-                            val fileNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-
-                            fileSize = cursor.getLong(fileSizeIndex).toString()
-
-                            val fileName = cursor.getString(fileNameIndex)
-
-
-
-                            fragmentHomeBinding.tvFileName.text = getString(
-                                    R.string.file_name,
-                                    fileName
-                            )
-
-                            fragmentHomeBinding.tvFileName.visibility = View.VISIBLE
-
-                            mediaAttached = true
-
-
-
-                            Log.d(HomeFragment::class.java.simpleName, "$fileSize  and $fileName")
-                        }
-                    } catch (e: Exception) {
-
-                        e.printStackTrace()
-                    }
-
-
-                }
-
-                cursor?.close()
+                getFileName()
 
 
             }
@@ -528,10 +532,48 @@ class HomeFragment:Fragment(){
 
     }
 
-    fun setUpAppTokenAndAppTokenSecret(){
-        lifecycleScope.launch {
+    fun getFileName(){
+        val contentResolver = requireContext().contentResolver
+
+
+        val cursor = contentResolver.query(fileUri!!, null, null, null, null)
+
+
+        cursor?.let {
+            try {
+                if (cursor.moveToFirst()) {
+                    val fileSizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+
+                    val fileNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+
+                    fileSize = cursor.getLong(fileSizeIndex).toString()
+
+                  fileName = cursor.getString(fileNameIndex)
+
+
+
+                    fragmentHomeBinding.tvFileName.text = getString(
+                            R.string.file_name,
+                            fileName
+                    )
+
+                    fragmentHomeBinding.tvFileName.visibility = View.VISIBLE
+
+                    mediaAttached = true
+
+
+
+                    Log.d(HomeFragment::class.java.simpleName, "$fileSize  and $fileName")
+                }
+            } catch (e: Exception) {
+
+                e.printStackTrace()
+            }
+
 
         }
+
+        cursor?.close()
 
     }
 

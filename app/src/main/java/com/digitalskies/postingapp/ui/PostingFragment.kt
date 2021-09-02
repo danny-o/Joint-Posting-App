@@ -30,8 +30,8 @@ import java.io.File
 
 
 const val MESSAGE="message"
-const val LINK="LINK"
-const val MEDIA_URI="media_uri"
+
+
 
 const val MEDIA_TYPE="media_type"
 
@@ -241,9 +241,9 @@ class PostingFragment:Fragment() {
         getString(R.string.queued).let {
             postBinding.tvLinkedinPosting.text=it
 
-            postBinding.tvTwitterPosting.text=it
+            postBinding.tvFacebookPosting.text=it
 
-            postBinding.tvLinkedinPosting.text=it
+            postBinding.tvWhatsappPosting.text=it
         }
 
 

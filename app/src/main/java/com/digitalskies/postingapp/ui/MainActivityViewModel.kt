@@ -213,7 +213,7 @@ class MainActivityViewModel(private val postingApplication: Application):Android
 
     }
 
-suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
+suspend fun postOnTwitter(status: String, mediaId: String? = null){
 
     val sharedPreferences=PreferenceManager.getDefaultSharedPreferences(postingApplication)
     val secret=sharedPreferences.getString(TWITTER_CLIENT_SECRET, "")
@@ -276,7 +276,7 @@ suspend fun postOnTwitter(status: String = "Hello", mediaId: String? = null){
 
 }
 
-   suspend fun postOnTwitterWithMedia(status: String = "Hello", file: File, mediaType: String){
+   suspend fun postOnTwitterWithMedia(status: String = "", file: File, mediaType: String){
 
         val sharedPreferences=PreferenceManager.getDefaultSharedPreferences(postingApplication)
         val secret=sharedPreferences.getString(TWITTER_CLIENT_SECRET, "")
