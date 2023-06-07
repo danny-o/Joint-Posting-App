@@ -2,27 +2,32 @@ package com.digitalskies.postingapp.ui
 
 
 import android.app.Application
+import android.os.Environment
 import android.util.Base64
+
 import android.util.Log
-import androidx.datastore.preferences.core.*
-import androidx.lifecycle.*
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.digitalskies.postingapp.*
 import com.digitalskies.postingapp.api.RestClient
 import com.digitalskies.postingapp.application.dataStore
 import com.digitalskies.postingapp.models.*
 import com.digitalskies.postingapp.utils.*
-import com.google.gson.Gson
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.FileInputStream
-import kotlin.collections.HashMap
+import io.ktor.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.*
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+import java.util.Base64.getEncoder;
 import kotlin.collections.set
+import kotlin.random.Random
 
 class MainActivityViewModel(private val postingApplication: Application):AndroidViewModel(postingApplication) {
 
@@ -33,7 +38,7 @@ class MainActivityViewModel(private val postingApplication: Application):Android
 
     var twitterOAuthVerifier:String?=null
 
-    val TWITTER_MAX_FILE_SIZE=40*1024;
+    val TWITTER_MAX_FILE_SIZE=100*1024;
 
     val linkedInUserIsSet: Flow<Boolean>
     get() = checkLinkedInLogin(application = postingApplication)
@@ -213,7 +218,7 @@ class MainActivityViewModel(private val postingApplication: Application):Android
 
     }
 
-suspend fun postOnTwitter(status: String, mediaId: String? = null){
+suspend fun postOnTwitter(status: String, mediaId: String? = null,inReplyTo:String?=null){
 
     val sharedPreferences=PreferenceManager.getDefaultSharedPreferences(postingApplication)
     val secret=sharedPreferences.getString(TWITTER_CLIENT_SECRET, "")
@@ -258,7 +263,7 @@ suspend fun postOnTwitter(status: String, mediaId: String? = null){
             val header=twitterHeaderBuilder.buildString()
             Log.d(MainActivityViewModel::class.java.simpleName, header)
 
-            RestClient.getTwitterApi().tweet(authorization = header, status = status, mediaId = mediaId)
+            RestClient.getTwitterApi().tweet(authorization = header, status = status, mediaId = mediaId,inReplyTo = inReplyTo)
 
             twitterResponse.postValue(Event(TwitterResponse.TwitterResponseSuccessful))
 
@@ -383,7 +388,7 @@ suspend fun postOnTwitter(status: String, mediaId: String? = null){
                   val fileInputStream=FileInputStream(file)
                   val bytes=ByteArray(file.length().toInt())
                   fileInputStream.read(bytes)
-                  Base64.encodeToString(bytes, Base64.DEFAULT)
+                 Base64.encodeToString(bytes, Base64.DEFAULT)
               }
 
 
@@ -432,6 +437,286 @@ suspend fun postOnTwitter(status: String, mediaId: String? = null){
        }
 
 
+    }
+
+
+
+   fun getUser(userName:String){
+
+        val sharedPreferences=PreferenceManager.getDefaultSharedPreferences(postingApplication)
+        val secret=sharedPreferences.getString(TWITTER_CLIENT_SECRET, "")
+
+        val key=sharedPreferences.getString(TWITTER_API_KEY, "")
+
+        val encodedSecret=urlEncodeString(secret.toString())
+
+        val encodedKey=urlEncodeString(key.toString())
+
+
+
+        val b64EncodedSecretAndKey= getEncoder().encodeToString("$encodedKey:$encodedSecret".toByteArray())
+
+
+
+
+
+        viewModelScope.launch {
+
+
+            try {
+                val bearerToken=RestClient
+                    .getTwitterApi()
+                    .getTwitterBearerToken("${RestClient.BASIC} $b64EncodedSecretAndKey")
+
+                val user=RestClient.getTwitterApi().getUser("${RestClient.BEARER}${bearerToken.accessToken}",userName)
+
+                val userMentions=RestClient.getTwitterApi().getUserMentions("${RestClient.BEARER}${bearerToken.accessToken}",user.data.id)
+
+                if(userMentions.data[0].referencedTweets[0].type=="replied_to"){
+                    // postOnTwitter("@$user",inReplyTo = userMentions.data[0].referencedTweets[0].id)
+                    val tweetId=  userMentions.data[0].referencedTweets[0].id
+                    lookupTweet()
+
+                }
+            }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
+
+        }
+
+
+
+
+
+    }
+
+    fun lookupTweet(){
+
+
+        val sharedPreferences=PreferenceManager.getDefaultSharedPreferences(postingApplication)
+        val secret=sharedPreferences.getString(TWITTER_CLIENT_SECRET, "")
+
+        val key=sharedPreferences.getString(TWITTER_API_KEY, "")
+
+        val encodedSecret=urlEncodeString(secret.toString())
+
+        val encodedKey=urlEncodeString(key.toString())
+
+
+
+        val b64EncodedSecretAndKey= getEncoder().encodeToString("$encodedKey:$encodedSecret".toByteArray())
+
+
+
+
+
+        viewModelScope.launch {
+
+
+            try {
+                val bearerToken=RestClient
+                    .getTwitterApi()
+                    .getTwitterBearerToken("${RestClient.BASIC} $b64EncodedSecretAndKey")
+
+                getLatestTweets2(bearerToken)
+
+                //val user=RestClient.getTwitterApi().getUser("${RestClient.BEARER}${bearerToken.accessToken}",userName)
+
+                //val query=""
+
+               //val userMentions=RestClient.getTwitterApi().getUserMentions(authorization = "${RestClient.BEARER}${bearerToken.accessToken}", userId = user.data.id)
+
+                //RestClient.getTwitterApi().getTrends(authorization = "${RestClient.BEARER}${bearerToken.accessToken}", id = "1528488")
+
+
+               /* if(userMentions.data[0].referencedTweets[0].type=="replied_to"){
+                    // postOnTwitter("@$user",inReplyTo = userMentions.data[0].referencedTweets[0].id)
+
+                    val repliedToTweetId=  userMentions.data[0].referencedTweets[0].id
+
+                    val repliedToUserName=userMentions.data[0].entities.mentions[0].userName
+
+
+
+                    val tweet=RestClient.getTwitterApi().lookupTweet("${RestClient.BEARER}${bearerToken.accessToken}",repliedToTweetId )
+
+
+                    Log.d(MainActivityViewModel::class.simpleName,"like count ${tweet.data.publicMetrics}")
+
+                    val videoLink="https://twitter.com/$repliedToUserName/status/$repliedToTweetId/video/1"
+
+
+                    if(tweet.data.attachments!=null &&
+                        tweet.data.publicMetrics.likeCount.toInt()>100
+                        && tweet.data.language=="en"
+                    ){
+
+                        val videoLink="https://twitter.com/$repliedToUserName/status/$repliedToTweetId/video/1"
+
+                        postOnTwitter(status = videoLink)
+                    }
+
+
+                }*/
+            }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
+
+        }
+
+
+    }
+    suspend fun getLatestTweets2(bearerToken:AccessTokenResponse){
+
+        val twitterAPi= RestClient.getTwitterApi()
+
+        val searchedTweets=twitterAPi.searchTweets(
+            authorization = "${RestClient.BEARER}${bearerToken.accessToken}",
+            query = "\uD83D\uDE02 OR \uD83D\uDE32 OR \uD83E\uDD23 filter:native_video"
+        )
+
+
+        var selectedTweet: Statuses?=null
+
+
+        searchedTweets.statuses.shuffle()
+
+
+        for(tweet in searchedTweets.statuses){
+
+            Log.d(this::class.simpleName,"tweet is ${tweet.text}")
+
+            Log.d(this::class.simpleName,"tweet Rt: ${tweet.text?.substring(0,3)}")
+
+            Log.d(this::class.simpleName,"tweet lang is ${tweet.lang}")
+            if (tweet.text?.substring(0,3)?.trim()=="RT") {
+                Log.d(this::class.simpleName,"tweet Rt")
+                if(tweet.lang=="en"||tweet.lang=="sw"){
+
+                    selectedTweet= tweet
+                    break
+                }
+
+            }
+
+        }
+        if(selectedTweet==null){
+            Log.d(this::class.simpleName,"no tweet found")
+
+            return
+        }
+
+
+        val addTrends= java.util.Random().nextBoolean()
+
+        //val userName=selectedTweet.entities.userMentions[0].screenName
+
+        var videoLink:String?=null
+
+        if(selectedTweet.entities?.media?.isNotEmpty() == true){
+
+            videoLink=selectedTweet.entities?.media?.get(0)?.expandedUrl?:return
+        }
+        else{
+            return
+        }
+
+
+
+
+
+        //postOnTwitter(videoLink)
+
+        if(addTrends){
+            val trends=twitterAPi.getTrends(authorization = "${RestClient.BEARER}${bearerToken.accessToken}", id = "1528488")
+
+            val topics="${trends[0].trends[0].name} ${trends[0].trends[1].name} ${trends[0].trends[2].name} ${trends[0].trends[3].name} ${trends[0].trends[4].name}"
+
+            val text="Follow us for an hourly dose of awesome videos $topics $videoLink"
+
+            postOnTwitter(text)
+
+        }
+        else{
+            val useEmoji= java.util.Random().nextBoolean()
+            if(useEmoji){
+                val emoji=when{
+                    selectedTweet.text?.contains("\uD83D\uDE02")==true ->"\uD83D\uDE02"
+
+                    selectedTweet.text?.contains("\uD83D\uDE32")==true ->"\uD83D\uDE32"
+
+                    selectedTweet.text?.contains("\uD83E\uDD23")==true ->"\uD83E\uDD23"
+
+                    else->  "\uD83D\uDE02"
+                }
+                postOnTwitter("$emoji $videoLink")
+            }
+            else{
+                postOnTwitter(videoLink)
+            }
+
+        }
+
+
+    }
+    suspend fun getLatestTweets(bearerToken:AccessTokenResponse){
+
+        val twitterAPi= RestClient.getTwitterApi()
+
+        val searchedTweets=twitterAPi.searchTweets(authorization = "${RestClient.BEARER}${bearerToken.accessToken}", query = "\uD83D\uDE02 OR \uD83D\uDE32 OR \uD83E\uDD23 filter:native_video")
+
+
+        var selectedTweet:Statuses?=null
+
+
+        for(tweet in searchedTweets.statuses){
+
+            Log.d(this::class.simpleName,"tweet is ${tweet.text}")
+
+            Log.d(this::class.simpleName,"tweet Rt: ${tweet.text?.substring(0,3)}")
+          if (tweet.text?.substring(0,3)?.trim()=="RT") {
+              Log.d(this::class.simpleName,"tweet Rt")
+             selectedTweet= tweet
+              break
+          }
+
+        }
+        if(selectedTweet==null){
+            Log.d(this::class.simpleName,"no tweet found")
+            return
+        }
+
+
+        val addTrends=(1..4).random()
+
+       //val userName=selectedTweet.entities.userMentions[0].screenName
+        val videoLink=selectedTweet.entities?.media?.get(0)?.expandedUrl?:return
+
+
+
+        //postOnTwitter(videoLink)
+
+        if(addTrends>3){
+            val trends=twitterAPi.getTrends(authorization = "${RestClient.BEARER}${bearerToken.accessToken}", id = "1528488")
+
+            val topics="${trends[0].trends[0].name} ${trends[0].trends[1].name} ${trends[0].trends[2].name} ${trends[0].trends[3].name} ${trends[0].trends[4].name}"
+
+            val text="Follow us for an hourly dose of awesome videos $topics $videoLink"
+
+            postOnTwitter(text)
+
+        }
+        else{
+            postOnTwitter(videoLink)
+        }
+
+
+    }
+
+    fun urlEncodeString(stringToEncode: String): String{
+        return URLEncoder.encode(stringToEncode, StandardCharsets.UTF_8.toString())
     }
 
 

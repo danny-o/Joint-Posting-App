@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/main_container.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/main_container.xml"
+    },
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_settings.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/fragment_settings.xml"
+    },
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_authorization.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/fragment_authorization.xml"
+    },
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_post.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/fragment_post.xml"
+    },
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_home.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/fragment_home.xml"
+    },
+    {
+        "merged": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_facebook_login.xml",
+        "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/layout/fragment_facebook_login.xml"
+    }
+]

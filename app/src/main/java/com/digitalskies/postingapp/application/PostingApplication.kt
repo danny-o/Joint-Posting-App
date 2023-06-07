@@ -37,8 +37,8 @@ class PostingApplication:Application() {
 
         val sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this)
 
-        sharedPreferences.edit().putString(LINKEDIN_CLIENT_SECRET,"YOUR LINKEDIN APP CLIENT SECRET").apply()
-        sharedPreferences.edit().putString(LINKEDIN_CLIENT_ID,"YOUR LINKEDIN APP CLIENT ID").apply()
+        sharedPreferences.edit().putString(LINKEDIN_CLIENT_SECRET,"a1oP5V1AJzkfQON0").apply()
+        sharedPreferences.edit().putString(LINKEDIN_CLIENT_ID,"86lv9vqbo6dmwh").apply()
         sharedPreferences.edit().putBoolean(LINKEDIN_CLIENT_ID_AND_SECRET_SET,true).apply()
 
 
@@ -48,8 +48,8 @@ class PostingApplication:Application() {
 
 
         val sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this)
-        sharedPreferences.edit().putString(TWITTER_CLIENT_SECRET,"YOUR TWITTER APP CLIENT SECRET").apply()
-        sharedPreferences.edit().putString(TWITTER_API_KEY,"YOUR TWITTER APP API KEY").apply()
+        sharedPreferences.edit().putString(TWITTER_CLIENT_SECRET,"WjkmnmQ9ARIo86ZbsumMuNBOZ4yPrXJGK38N0QSYy93Q4BMXYp").apply()
+        sharedPreferences.edit().putString(TWITTER_API_KEY,"HksreL3zhC75C1E55CxLJr1XQ").apply()
         sharedPreferences.edit().putBoolean(TWITTER_API_KEY_AND_SECRET_SET,true).apply()
 
 

@@ -6,7 +6,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,16 +16,14 @@ import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -31,13 +31,20 @@ import com.digitalskies.postingapp.R
 import com.digitalskies.postingapp.databinding.FragmentHomeBinding
 import com.digitalskies.postingapp.utils.EventObserver
 import com.digitalskies.postingapp.utils.FilePath
-import com.digitalskies.postingapp.utils.OnEventChanged
+import io.ktor.util.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.BufferedWriter
 import java.io.File
+import java.io.FileWriter
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
+
 
 
 class HomeFragment:Fragment(){
@@ -100,8 +107,6 @@ class HomeFragment:Fragment(){
 
 
 
-
-
         setUpPostBtn()
 
         setUpAttachMediaBtn()
@@ -109,6 +114,7 @@ class HomeFragment:Fragment(){
         setUpCheckBoxes()
 
         setUpSettingsBtn()
+
 
 
 
@@ -178,8 +184,11 @@ class HomeFragment:Fragment(){
         })
 
 
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
 
 
+
+        }.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
 
 
@@ -215,71 +224,98 @@ class HomeFragment:Fragment(){
 
     }
 
-
     private fun setUpPostBtn() {
+
+
+
+
+
+
         fragmentHomeBinding.btnPost.setOnClickListener {
 
-            if(fragmentHomeBinding.etMessage.text.isEmpty()){
 
-                if(!mediaAttached){
-                    return@setOnClickListener
+            if(fragmentHomeBinding.etMessage.text.isNullOrBlank()){
+                lifecycleScope.launch{
+                    val userName= listOf("DownloaderBot","GetVideoBot","SendVidBot","Get_This_V").random()
+
+                    Log.d(this::class.simpleName,"${Build.MANUFACTURER},${Build.HOST} ${Build.SERIAL}")
+
+
+                    mainActivityViewModel.lookupTweet()
+                }
+            }
+            else{
+
+                if(fragmentHomeBinding.etMessage.text.isEmpty()){
+
+                    if(!mediaAttached){
+                        return@setOnClickListener
+                    }
+
+
+
                 }
 
 
-
-            }
-
-
-            val bundle=Bundle()
+                val bundle=Bundle()
 
 
 
-            bundle.putString(MESSAGE, fragmentHomeBinding.etMessage.text.toString())
+                bundle.putString(MESSAGE, fragmentHomeBinding.etMessage.text.toString())
 
 
-            val links=extractUrls(fragmentHomeBinding.etMessage.text.toString())
+                val links=extractUrls(fragmentHomeBinding.etMessage.text.toString())
 
-            if(links.isNotEmpty()){
-                val link=links[0]
+                if(links.isNotEmpty()){
+                    val link=links[0]
 
-                bundle.putString(LINK,link)
+                    bundle.putString(LINK,link)
 
-            }
+                }
 
 
-            bundle.putBoolean(POST_ON_TWITTER,toPostOnTwitter)
+                bundle.putBoolean(POST_ON_TWITTER,toPostOnTwitter)
 
-            bundle.putBoolean(POST_ON_FACEBOOK,toPostOnFacebook)
+                bundle.putBoolean(POST_ON_FACEBOOK,toPostOnFacebook)
 
-            bundle.putBoolean(POST_ON_LINKEDIN,toPostOnLinkedIn)
+                bundle.putBoolean(POST_ON_LINKEDIN,toPostOnLinkedIn)
 
-            bundle.putBoolean(POST_ON_WHATSAPP,toPostOnWhatsapp)
+                bundle.putBoolean(POST_ON_WHATSAPP,toPostOnWhatsapp)
 
-            if(mediaAttached){
-                bundle.putString(MEDIA_URI,fileUri.toString())
+                if(mediaAttached){
+                    bundle.putString(MEDIA_URI,fileUri.toString())
 
-                bundle.putString(MEDIA_TYPE,fileType)
-            }
+                    bundle.putString(MEDIA_TYPE,fileType)
+                }
 
-            transaction=null
+                transaction=null
 
-           transaction= requireActivity().supportFragmentManager
+                transaction= requireActivity().supportFragmentManager
                     .beginTransaction()
                     .setCustomAnimations(
-                            R.anim.slide_in_right,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_left,
-                            R.anim.slide_out_right
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
                     )
 
 
 
-          transaction?.addToBackStack(null)
-              ?.replace(R.id.frame_layout,PostingFragment::class.java,bundle,PostingFragment::class.java.simpleName)
-              ?.commit()
+                transaction?.addToBackStack(null)
+                    ?.replace(R.id.frame_layout,PostingFragment::class.java,bundle,PostingFragment::class.java.simpleName)
+                    ?.commit()
+            }
+
+
 
 
         }
+       /* fragmentHomeBinding.btnPost.setOnClickListener {
+
+
+
+
+        }*/
     }
 
     private fun setUpAttachMediaBtn() {

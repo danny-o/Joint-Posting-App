@@ -1,14 +1,12 @@
 package com.digitalskies.postingapp.api
 
-import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
-
 
 
 object RestClient {
@@ -20,9 +18,16 @@ object RestClient {
 
     const val TWITTER_BASE_URL="https://api.twitter.com"
 
-    const val LINKEDIN_AUTHORIZATION="Authorization"
+    const val AUTHORIZATION="Authorization"
 
     const val TWITTER_AUTHORIZATION="authorization"
+
+
+    const val BASIC="Basic"
+
+    const val BEARER="Bearer "
+
+
 
     const val LINKEDIN_CLIENT_ID = "86lv9vqbo6dmwh"
 
@@ -84,6 +89,16 @@ object RestClient {
 
         okHttpClientBuilder.addInterceptor(httpLoggingInterceptor)
 
+        okHttpClientBuilder.addInterceptor(Interceptor { chain ->
+            val timeout=chain.request().header("connection_timeout")?.toInt()
+
+
+            timeout?.let {
+                chain.withConnectTimeout(timeout,TimeUnit.MINUTES)
+            }
+            chain.proceed(chain.request())
+        })
+
         okHttpClientBuilder.readTimeout(15, TimeUnit.SECONDS)
 
         okHttpClientBuilder.connectTimeout(15, TimeUnit.SECONDS)
@@ -97,6 +112,9 @@ object RestClient {
                 .build()
                 .create(TwitterApi::class.java)
     }
+
+
+
 
 
 

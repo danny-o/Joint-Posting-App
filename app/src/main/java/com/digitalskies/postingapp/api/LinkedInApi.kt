@@ -4,8 +4,6 @@ import com.digitalskies.postingapp.models.LinkedInAccessTokenResponse
 import com.digitalskies.postingapp.models.LinkedInEmailResponse
 import com.digitalskies.postingapp.models.LinkedInPost
 import com.digitalskies.postingapp.models.LinkedInProfile
-import com.digitalskies.postingapp.ui.HomeFragment
-import retrofit2.Response
 import retrofit2.http.*
 
 interface LinkedInApi {
@@ -30,15 +28,15 @@ interface LinkedInApi {
 
 
     @GET("me")
-    suspend fun getLinkedInUser(@Header(RestClient.LINKEDIN_AUTHORIZATION)authorization:String):LinkedInProfile
+    suspend fun getLinkedInUser(@Header(RestClient.AUTHORIZATION)authorization:String):LinkedInProfile
 
     @GET("emailAddress")
-    suspend fun getLinkedInEmail(@Header(RestClient.LINKEDIN_AUTHORIZATION)authorization:String,
+    suspend fun getLinkedInEmail(@Header(RestClient.AUTHORIZATION)authorization:String,
                                  @Query("q")query:String="members",
                                  @Query("projection")projection:String="(elements*(handle~))"):LinkedInEmailResponse
 
     @Headers("X-Restli-Protocol-Version: 2.0.0")
     @POST("ugcPosts")
-    suspend fun postOnLinkedIn(@Header(RestClient.LINKEDIN_AUTHORIZATION)authorization:String,@Body()requestBody:LinkedInPost)
+    suspend fun postOnLinkedIn(@Header(RestClient.AUTHORIZATION)authorization:String, @Body()requestBody:LinkedInPost)
 
 }

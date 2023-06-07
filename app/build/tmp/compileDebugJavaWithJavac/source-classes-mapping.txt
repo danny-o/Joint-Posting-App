@@ -1,0 +1,20 @@
+com/digitalskies/postingapp/databinding/FragmentAuthorizationBinding.java
+ com.digitalskies.postingapp.databinding.FragmentAuthorizationBinding
+com/digitalskies/postingapp/databinding/FragmentFacebookLoginBinding.java
+ com.digitalskies.postingapp.databinding.FragmentFacebookLoginBinding
+com/digitalskies/postingapp/databinding/FragmentSettingsBinding.java
+ com.digitalskies.postingapp.databinding.FragmentSettingsBinding
+com/digitalskies/postingapp/utils/Event.java
+ com.digitalskies.postingapp.utils.Event
+com/digitalskies/postingapp/utils/OnEventChanged.java
+ com.digitalskies.postingapp.utils.OnEventChanged
+com/digitalskies/postingapp/databinding/MainContainerBinding.java
+ com.digitalskies.postingapp.databinding.MainContainerBinding
+com/digitalskies/postingapp/utils/EventObserver.java
+ com.digitalskies.postingapp.utils.EventObserver
+com/digitalskies/postingapp/BuildConfig.java
+ com.digitalskies.postingapp.BuildConfig
+com/digitalskies/postingapp/databinding/FragmentHomeBinding.java
+ com.digitalskies.postingapp.databinding.FragmentHomeBinding
+com/digitalskies/postingapp/databinding/FragmentPostBinding.java
+ com.digitalskies.postingapp.databinding.FragmentPostBinding

@@ -34,5 +34,14 @@
     <string name="queued">Queued</string>
     <string name="talk_to_the_world">talk to the world</string>
     <string name="characters">%1d characters</string>
+    <string-array name="modes">
+        <item>One time repeated</item>
+        <item>Periodic mode</item>
+    </string-array>
+    <string-array name="search_type">
+        <item>latest</item>
+        <item>popular</item>
+        <item>mixed</item>
+    </string-array>
 
 </resources>

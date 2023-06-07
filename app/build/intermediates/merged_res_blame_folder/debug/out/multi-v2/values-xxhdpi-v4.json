@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-xxhdpi-v4/values-xxhdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/Users/cadmin/AndroidStudioProjects/PostingApp/app/src/main/res/values-xxhdpi/dimens.xml",
+                    "from": {
+                        "startLines": "6,4,3,2",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "197,149,102,57",
+                        "endColumns": "43,44,45,43",
+                        "endOffsets": "236,189,143,96"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,99,144,190",
+                        "endColumns": "43,44,45,43",
+                        "endOffsets": "94,139,185,229"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -34,3 +34,9 @@ const val TWITTER_SCREEN_NAME="twitter_screen_name"
 
 
 const val TWITTER_USER_SET="twitter_user_set"
+
+const val POST_VIDEOS="post_videos"
+
+const val POSTING_MODE_ONETIME=0
+
+const val POSTING_MODE_REPEATED=1
